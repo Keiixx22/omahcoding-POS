@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class RegisterOtpController extends Controller
 {
@@ -19,27 +20,38 @@ class RegisterOtpController extends Controller
         ]);
 
         $email = Str::lower(trim($data['email']));
+
+        $emailExists = DB::table('users')
+            ->whereRaw('LOWER(email) = ?', [$email])
+            ->exists();
+
+        if ($emailExists) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Email sudah terdaftar. Silakan login atau gunakan fitur lupa password.',
+            ], 422);
+        }
+
         $key = 'register-otp-send:' . sha1($email);
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
             return response()->json([
+                'success' => false,
                 'message' => 'Terlalu banyak permintaan OTP. Coba lagi beberapa saat.',
             ], 429);
-        }
-
-        if (User::where('email', $email)->exists()) {
-            return response()->json([
-                'message' => 'Email ini sudah terdaftar. Silakan gunakan email lain.',
-            ], 422);
         }
 
         $currentEmail = $request->session()->get('registration_otp.email');
 
         if ($currentEmail === $email) {
-            $lastSent = $request->session()->get('registration_otp.sent_at', 0);
+            $lastSent = $request->session()->get(
+                'registration_otp.sent_at',
+                0
+            );
 
             if (time() - $lastSent < 60) {
                 return response()->json([
+                    'success' => false,
                     'message' => 'Tunggu 60 detik sebelum meminta OTP baru.',
                 ], 429);
             }
@@ -59,13 +71,16 @@ class RegisterOtpController extends Controller
         RateLimiter::hit($key, 3600);
 
         try {
-            Mail::to($email)->send(new RegistrationOtpMail($otp));
+            Mail::to($email)->send(
+                new RegistrationOtpMail($otp)
+            );
         } catch (\Throwable $e) {
             $request->session()->forget('registration_otp');
 
             report($e);
 
             return response()->json([
+                'success' => false,
                 'message' => 'Email OTP gagal dikirim. Silakan coba lagi.',
             ], 500);
         }
@@ -84,10 +99,25 @@ class RegisterOtpController extends Controller
         ]);
 
         $email = Str::lower(trim($data['email']));
+
+        $emailExists = DB::table('users')
+            ->whereRaw('LOWER(email) = ?', [$email])
+            ->exists();
+
+        if ($emailExists) {
+            $request->session()->forget('registration_otp');
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Email sudah terdaftar. Silakan login atau gunakan fitur lupa password.',
+            ], 422);
+        }
+
         $otpData = $request->session()->get('registration_otp');
 
         if (! $otpData || $otpData['email'] !== $email) {
             return response()->json([
+                'success' => false,
                 'message' => 'Silakan minta OTP baru untuk email ini.',
             ], 422);
         }
@@ -103,6 +133,7 @@ class RegisterOtpController extends Controller
             $request->session()->forget('registration_otp');
 
             return response()->json([
+                'success' => false,
                 'message' => 'Kode OTP sudah kedaluwarsa. Silakan minta kode baru.',
             ], 422);
         }
@@ -111,21 +142,31 @@ class RegisterOtpController extends Controller
             $request->session()->forget('registration_otp');
 
             return response()->json([
+                'success' => false,
                 'message' => 'Batas percobaan tercapai. Silakan minta OTP baru.',
             ], 429);
         }
 
         if (! Hash::check($data['otp'], $otpData['hash'])) {
             $otpData['attempts']++;
-            $request->session()->put('registration_otp', $otpData);
+
+            $request->session()->put(
+                'registration_otp',
+                $otpData
+            );
 
             return response()->json([
+                'success' => false,
                 'message' => 'Kode OTP salah.',
             ], 422);
         }
 
         $otpData['verified'] = true;
-        $request->session()->put('registration_otp', $otpData);
+
+        $request->session()->put(
+            'registration_otp',
+            $otpData
+        );
 
         return response()->json([
             'success' => true,
