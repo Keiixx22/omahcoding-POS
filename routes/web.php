@@ -23,6 +23,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\Platform;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForgotPasswordController;
 
 /* ---------- Publik: landing page / company profile ---------- */
 Route::get('/', [LandingController::class, 'index'])->name('landing');
@@ -51,6 +52,21 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login')->name('login.password');
     Route::post('/register', [RegisterController::class, 'store'])->middleware('throttle:register')->name('register');
     Route::post('/login/pin', [AuthController::class, 'loginPin'])->middleware('throttle:pin')->name('login.pin');
+
+    // Lupa password
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])
+        ->name('password.request');
+
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'edit'])
+        ->name('password.reset');
+
+    Route::post('/reset-password', [ForgotPasswordController::class, 'update'])
+        ->middleware('throttle:5,1')
+        ->name('password.update');
 });
 
 /* ---------- Auth (admin & kasir); "account" = cek akun/bisnis masih aktif di tiap request ---------- */

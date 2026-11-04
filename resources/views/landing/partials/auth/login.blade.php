@@ -32,6 +32,12 @@
             <input type="password" name="password" required autocomplete="current-password"
                 placeholder="••••••••••••" class="{{ $inp }}">
         </div>
+        <div class="text-right -mt-2">
+            <a href="{{ route('password.request') }}"
+                class="text-xs font-bold text-blue-600 hover:text-blue-700 hover:underline">
+                Lupa kata sandi?
+            </a>
+        </div>
         <label class="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer">
             <input type="checkbox" name="remember" value="1"
                 class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"> <span>Ingat
