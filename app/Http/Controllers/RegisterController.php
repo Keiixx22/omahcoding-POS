@@ -24,14 +24,16 @@ class RegisterController extends Controller
         $email = Str::lower(trim((string) $request->input('email')));
         $request->merge(['email' => $email]);
 
-        // Pastikan email sudah diverifikasi menggunakan OTP
         $otpData = $request->session()->get('registration_otp');
 
         if (
             ! $otpData ||
             ! ($otpData['verified'] ?? false) ||
-            $otpData['email'] !== $email
+            ($otpData['email'] ?? null) !== $email ||
+            now()->timestamp > ($otpData['expires_at'] ?? 0)
         ) {
+            $request->session()->forget('registration_otp');
+
             $message = 'Verifikasi email terlebih dahulu sebelum menyelesaikan registrasi.';
 
             if ($request->expectsJson()) {
