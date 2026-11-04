@@ -62,18 +62,6 @@ class SettingsController extends Controller
             : 'Shift kasir dinonaktifkan. Kasir bisa langsung menerima pembayaran tanpa buka shift.');
     }
 
-    /** Bahasa tampilan (id / en). Default id. */
-    public function updateLanguage(Request $request)
-    {
-        $data = $request->validate(['language' => ['required', 'in:' . implode(',', Business::LANGUAGES)]]);
-
-        $request->user()->business->forceFill(['language' => $data['language']])->save();
-        AuditLog::record('settings.language_changed', null, ['language' => $data['language']]);
-        app()->setLocale($data['language']);   // pesan sukses langsung memakai bahasa baru
-
-        return redirect()->route('settings.edit')->with('success', __('settings.lang_saved'));
-    }
-
     /** Cetak struk thermal: aktif/nonaktif, cetak otomatis setelah bayar, dan lebar kertas (58/80 mm). */
     public function updatePrint(Request $request)
     {

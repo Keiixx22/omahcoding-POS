@@ -10,14 +10,14 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * Tes bahasa tampilan (Pengaturan): default Indonesia, bisa diganti ke English, nilai lain ditolak.
- * Belum pernah dijalankan (tidak ada vendor/ saat ditulis):  php artisan test --filter=LanguageSettingTest
+ * Pilihan bahasa dihapus: semua tampilan Indonesia, walau kolom businesses.language lama berisi 'en'.
+ *  php artisan test --filter=LanguageSettingTest
  */
 class LanguageSettingTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function admin(): User
+    private function admin(string $language = 'id'): User
     {
         $cat = BusinessCategory::first() ?? BusinessCategory::create([
             'slug' => 'cafe', 'name' => 'Cafe', 'icon' => 'x', 'color' => 'blue', 'tagline' => 't',
@@ -27,6 +27,7 @@ class LanguageSettingTest extends TestCase
             'business_category_id' => $cat->id, 'code' => 'LANG1', 'name' => 'Lang', 'owner_name' => 'Owner',
             'email' => 'lang@t.test', 'status' => 'active',
         ]);
+        $b->forceFill(['language' => $language])->save();
 
         return User::create([
             'business_id' => $b->id, 'name' => 'Admin', 'email' => Str::lower(Str::random(8)) . '@t.test',
@@ -34,28 +35,18 @@ class LanguageSettingTest extends TestCase
         ]);
     }
 
-    public function test_default_is_indonesian(): void
+    public function test_pos_is_indonesian(): void
     {
-        $u = $this->admin();
-        $this->assertSame('id', $u->business->fresh()->language);
-        $this->actingAs($u)->get(route('pos'))->assertOk()->assertSee('Keranjang')->assertDontSee('Walk-in Customer');
+        $this->actingAs($this->admin())->get(route('pos'))->assertOk()->assertSee('Keranjang')->assertDontSee('Walk-in Customer');
     }
 
-    public function test_switch_to_english_and_back(): void
+    public function test_legacy_english_business_still_sees_indonesian(): void
     {
-        $u = $this->admin();
-        $this->actingAs($u)->put(route('settings.language'), ['language' => 'en'])->assertRedirect(route('settings.edit'));
-        $this->assertSame('en', $u->business->fresh()->language);
-        $this->actingAs($u)->get(route('pos'))->assertOk()->assertSee('Cart')->assertDontSee('Keranjang kosong');
-
-        $this->actingAs($u)->put(route('settings.language'), ['language' => 'id']);
-        $this->assertSame('id', $u->business->fresh()->language);
+        $this->actingAs($this->admin('en'))->get(route('pos'))->assertOk()->assertSee('Keranjang');
     }
 
-    public function test_rejects_unknown_language(): void
+    public function test_language_route_removed(): void
     {
-        $u = $this->admin();
-        $this->actingAs($u)->put(route('settings.language'), ['language' => 'fr'])->assertSessionHasErrors('language');
-        $this->assertSame('id', $u->business->fresh()->language);
+        $this->actingAs($this->admin())->put('/settings/language', ['language' => 'en'])->assertNotFound();
     }
 }

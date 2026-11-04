@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 class Business extends Model
 {
     /** Bahasa tampilan yang tersedia di Pengaturan. */
-    public const LANGUAGES = ['id', 'en'];
 
     protected $fillable = [
         'business_category_id', 'code', 'name', 'owner_name', 'email', 'phone',
