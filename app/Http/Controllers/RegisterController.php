@@ -59,12 +59,13 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'max:100', new StrongPassword($request->input('email'), $request->input('owner_name'))],
             'category' => ['required', Rule::exists('business_categories', 'slug')->where('is_active', true)],
             'outlet_count' => ['required', Rule::in(self::OUTLETS)],
-            'location' => ['required', 'string', 'max:120'],
+            'location' => ['required', 'string', 'max:120', 'regex:/^(?=(?:.*\p{L}){3})[\p{L}\p{N}\s.,-]+$/u'],
             'agree' => ['accepted'],
         ], [
             'email.unique' => 'Email ini sudah terdaftar. Silakan masuk atau pakai email lain.',
             'category.required' => 'Pilih kategori usaha terlebih dahulu.',
             'category.exists' => 'Kategori usaha ini belum tersedia.',
+            'location.regex' => 'Lokasi hanya boleh berisi huruf, angka, spasi, titik, koma atau tanda hubung, dan harus memuat nama tempat yang valid.',
             'agree.accepted' => 'Centang persetujuan ketentuan layanan terlebih dahulu.',
         ]);
 

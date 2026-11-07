@@ -12,7 +12,6 @@ return [
     'staff' => 'Staf',
     'settings' => 'Pengaturan',
     'audit' => 'Log Audit',
-    'office' => 'Kantor Virtual',
     'help' => 'Panduan',
     'group_overview' => 'Ringkasan',
     'group_management' => 'Manajemen',

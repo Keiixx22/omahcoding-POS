@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <title>Aktifkan 2FA · CashierStore Platform</title>
+  <title>Aktifkan 2FA · TapKit Platform</title>
   <meta name="robots" content="noindex,nofollow">
   @include('partials.head')
   <style>.label { color:#565B75; }</style>

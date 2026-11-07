@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <title>Verifikasi 2 langkah · CashierStore Platform</title>
+  <title>Verifikasi 2 langkah · TapKit Platform</title>
   <meta name="robots" content="noindex,nofollow">
   @include('partials.head')
   <style>.label { color:#565B75; }</style>
@@ -10,8 +10,8 @@
 <main class="min-h-screen grid place-items-center p-4">
   <div class="w-full max-w-md">
     <div class="flex items-center gap-3 mb-6 text-white">
-      <div class="w-11 h-11 rounded-2xl bg-lime-accent text-slate-950 grid place-items-center"><span class="material-symbols-outlined fill-1" style="font-size:26px">shield_person</span></div>
-      <div class="leading-tight"><div class="font-extrabold text-xl tracking-tight">Cashier<span class="text-lime-accent">.</span>store</div><div class="text-sm font-bold text-slate-400">Platform</div></div>
+      <img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="44" height="44" class="w-11 h-11 rounded-2xl shrink-0">
+      <div class="leading-tight"><div class="font-extrabold text-xl tracking-tight">Tap<span class="text-lime-accent">Kit</span></div><div class="text-sm font-bold text-slate-400">Platform</div></div>
     </div>
     <div class="rounded-3xl bg-white p-6 sm:p-8">
       <h1 class="text-2xl font-extrabold tracking-tight text-slate-900">Verifikasi 2 langkah</h1>

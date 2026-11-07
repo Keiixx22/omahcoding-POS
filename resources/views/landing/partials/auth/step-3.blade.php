@@ -6,7 +6,7 @@
             <x-ico v="check" style="font-size:26px" /></div>
         <h3 class="text-xl font-black text-slate-900">Langkah 3: Konfirmasi Data Usaha Anda
         </h3>
-        <p class="text-xs text-slate-500">Periksa ringkasan sebelum akun CashierStore Anda
+        <p class="text-xs text-slate-500">Periksa ringkasan sebelum akun TapKit Anda
             dibuat.</p>
     </div>
     <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200/90 space-y-5">
@@ -60,7 +60,7 @@
                     @checked(old('agree'))
                     class="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
                 <span>Saya menyatakan data usaha di atas valid dan menyetujui Ketentuan
-                    Layanan &amp; Kebijakan Privasi CashierStore.</span>
+                    Layanan &amp; Kebijakan Privasi TapKit.</span>
             </label>
             <p id="step3-error" class="hidden mt-2 text-xs font-bold text-rose-600"></p>
         </div>

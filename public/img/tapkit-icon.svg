@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="TapKit">
+  <rect width="512" height="512" rx="116" fill="#D2F839"/>
+  <g fill="none" stroke="#181829" stroke-linecap="round">
+    <circle cx="256" cy="300" r="176" stroke-width="12" opacity=".12"/>
+    <circle cx="256" cy="300" r="122" stroke-width="12" opacity=".22"/>
+  </g>
+  <g fill="#181829">
+    <rect x="132" y="128" width="248" height="72" rx="24"/>
+    <rect x="220" y="128" width="72" height="264" rx="24"/>
+  </g>
+</svg>

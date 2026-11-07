@@ -43,7 +43,7 @@ return [
             'provider' => 'users',
         ],
 
-        // admin platform CashierStore (terpisah dari user toko)
+        // admin platform TapKit (terpisah dari user toko)
         'platform' => [
             'driver' => 'session',
             'provider' => 'platform_admins',

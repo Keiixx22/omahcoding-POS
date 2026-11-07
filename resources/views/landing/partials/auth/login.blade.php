@@ -45,7 +45,7 @@
         </label>
         <button type="submit"
             class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all">Masuk
-            ke Dashboard CashierStore</button>
+            ke Dashboard TapKit</button>
     </form>
 
     <form id="form-pin" method="POST" action="{{ route('login.pin') }}"

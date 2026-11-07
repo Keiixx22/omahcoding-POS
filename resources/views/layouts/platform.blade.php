@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <title>@yield('title', 'Platform') · CashierStore Platform</title>
+  <title>@yield('title', 'Platform') · TapKit Platform</title>
   <meta name="robots" content="noindex,nofollow">
   @include('partials.head')
   <style>
@@ -30,9 +30,9 @@
 <div class="min-h-screen md:flex">
   <aside class="hidden md:flex md:sticky md:top-0 md:h-screen w-20 xl:w-[260px] shrink-0 flex-col bg-sidebar-bg text-slate-300 border-r border-slate-800/60">
     <div class="flex items-center gap-3 px-0 xl:px-5 justify-center xl:justify-start h-20 shrink-0">
-      <div class="w-10 h-10 rounded-2xl bg-lime-accent text-slate-950 grid place-items-center shrink-0"><span class="material-symbols-outlined fill-1" style="font-size:24px">shield_person</span></div>
+      <img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="40" height="40" class="w-10 h-10 rounded-2xl shrink-0">
       <div class="leading-tight hidden xl:block">
-        <div class="font-extrabold text-lg text-white tracking-tight">Cashier<span class="text-lime-accent">.</span>store</div>
+        <div class="font-extrabold text-lg text-white tracking-tight">Tap<span class="text-lime-accent">Kit</span></div>
         <div class="text-xs font-bold text-slate-400">Platform</div>
       </div>
     </div>
@@ -63,7 +63,7 @@
       <div class="flex items-center justify-between px-2 h-14">
         <div class="flex items-center gap-1">
           <button type="button" id="pMenuBtn" class="p-2.5 rounded-xl" aria-label="Buka menu" aria-controls="pDrawer" aria-expanded="false"><span class="material-symbols-outlined">menu</span></button>
-          <span class="font-extrabold tracking-tight flex items-center gap-1.5"><span class="w-6 h-6 rounded-lg bg-lime-accent text-slate-950 grid place-items-center"><span class="material-symbols-outlined fill-1" style="font-size:16px">shield_person</span></span>Platform</span>
+          <span class="font-extrabold tracking-tight flex items-center gap-1.5"><img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="24" height="24" class="w-6 h-6 rounded-lg">Platform</span>
         </div>
         <form method="POST" action="{{ route('platform.logout') }}">@csrf<button class="p-2.5 rounded-xl" aria-label="Keluar"><span class="material-symbols-outlined">logout</span></button></form>
       </div>
@@ -89,8 +89,8 @@
 <aside id="pDrawer" inert class="md:hidden fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] -translate-x-full transition-transform duration-200 flex flex-col bg-sidebar-bg text-slate-300 border-r border-slate-800/60" aria-label="Menu platform">
   <div class="flex items-center justify-between gap-3 px-5 h-16 shrink-0">
     <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-2xl bg-lime-accent text-slate-950 grid place-items-center shrink-0"><span class="material-symbols-outlined fill-1" style="font-size:22px">shield_person</span></div>
-      <div class="leading-tight"><div class="font-extrabold text-white tracking-tight">Cashier<span class="text-lime-accent">.</span>store</div><div class="text-xs font-bold text-slate-400">Platform</div></div>
+      <img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="36" height="36" class="w-9 h-9 rounded-2xl shrink-0">
+      <div class="leading-tight"><div class="font-extrabold text-white tracking-tight">Tap<span class="text-lime-accent">Kit</span></div><div class="text-xs font-bold text-slate-400">Platform</div></div>
     </div>
     <button type="button" id="pCloseBtn" class="p-2 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white" aria-label="Tutup menu"><span class="material-symbols-outlined">close</span></button>
   </div>

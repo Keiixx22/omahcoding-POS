@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
-  <title>@yield('title', 'Dashboard') · CashierStore</title>
+  <title>@yield('title', 'Dashboard') · TapKit</title>
   @include('partials.head')
 </head>
 <body class="min-h-screen">
@@ -20,27 +20,21 @@
     ['route' => 'staff.index', 'match' => 'staff.*', 'icon' => 'badge', 'label' => __('nav.staff'), 'admin' => true, 'group' => 'Management'],
     ['route' => 'settings.edit', 'match' => 'settings.*', 'icon' => 'settings', 'label' => __('nav.settings'), 'admin' => true, 'group' => 'Management'],
     ['route' => 'audit.index', 'match' => 'audit.*', 'icon' => 'policy', 'label' => __('nav.audit'), 'admin' => true, 'group' => 'Management'],
-    ['route' => 'office', 'match' => 'office', 'icon' => 'apartment', 'label' => __('nav.office'), 'admin' => false, 'group' => 'Management'],
     ['route' => 'help', 'match' => 'help', 'icon' => 'menu_book', 'label' => __('nav.help'), 'admin' => false, 'group' => 'Management'],
   ];
   $shiftOn = (bool) ($u->business?->requiresShift() ?? true);
   $visible = collect($nav)->reject(fn ($n) => ($n['admin'] && ! $u->isAdmin()) || ($n['route'] === 'shifts.index' && ! $shiftOn));
   $groups = $visible->groupBy('group');
 
-  // Bottom nav mobile: 4 menu utama + tombol "Menu". Disembunyikan di kasir karena halaman itu punya bar keranjang sendiri.
-  $bottomShort = ['dashboard' => __('nav.dashboard'), 'pos' => __('nav.short_pos'), 'products.index' => __('nav.short_products'), 'customers.index' => __('nav.short_customers'), 'shifts.index' => __('nav.short_shifts')];
-  $bottom = $visible->filter(fn ($n) => isset($bottomShort[$n['route']]))
-      ->sortBy(fn ($n) => array_search($n['route'], array_keys($bottomShort)))->take(4)->values();
-  $showBottomNav = ! request()->routeIs('pos');
 @endphp
 
 <div class="min-h-screen md:flex">
   {{-- ========== SIDEBAR: drawer (mobile) · icon rail (tablet) · penuh (desktop) ========== --}}
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-[280px] -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:w-20 xl:w-[260px] flex flex-col shrink-0 bg-sidebar-bg text-slate-300 border-r border-slate-800/60 shadow-2xl md:shadow-none transition-transform duration-300 overflow-y-auto no-scrollbar">
     <div class="flex items-center gap-3 px-5 md:px-0 md:justify-center xl:justify-start xl:px-5 h-20 shrink-0">
-      <div class="w-10 h-10 rounded-2xl bg-lime-accent text-slate-950 grid place-items-center shadow-lime shrink-0"><span class="material-symbols-outlined fill-1" style="font-size:24px">storefront</span></div>
+      <img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="40" height="40" class="w-10 h-10 rounded-2xl shadow-lime shrink-0">
       <div class="leading-tight min-w-0 md:hidden xl:block">
-        <div class="font-extrabold text-lg text-white tracking-tight">Cashier<span class="text-lime-accent">.</span>store</div>
+        <div class="font-extrabold text-lg text-white tracking-tight">Tap<span class="text-lime-accent">Kit</span></div>
         <div class="text-[10px] font-bold text-slate-400 tracking-wider uppercase truncate">{{ auth()->user()?->business?->name ?? config('pos.store_name') }} POS</div>
       </div>
       <button type="button" id="closeMenu" class="ml-auto p-2 -mr-2 text-slate-400 hover:text-white md:hidden" aria-label="{{ __('nav.close_menu') }}"><span class="material-symbols-outlined">close</span></button>
@@ -94,12 +88,12 @@
   <div id="backdrop" class="hidden fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm md:hidden"></div>
 
   {{-- ========== KONTEN ========== --}}
-  <main class="flex-1 min-w-0 {{ $showBottomNav ? 'pb-24' : 'pb-6' }} md:pb-0 {{ request()->routeIs('pos') ? 'overflow-x-clip' : '' }}">
+  <main class="flex-1 min-w-0 pb-6 md:pb-0 {{ request()->routeIs('pos') ? 'overflow-x-clip' : '' }}">
     <div class="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 h-14 bg-white/90 backdrop-blur border-b border-card-border">
       <button id="menuBtn" class="p-2 -ml-2 rounded-xl" aria-label="{{ __('nav.open_menu') }}"><span class="material-symbols-outlined">menu</span></button>
       <span class="font-extrabold tracking-tight flex items-center gap-1.5">
-        <span class="w-6 h-6 rounded-lg bg-lime-accent text-slate-950 grid place-items-center"><span class="material-symbols-outlined fill-1" style="font-size:16px">storefront</span></span>
-        Cashier<span class="text-brand-600">.</span>store
+        <img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="24" height="24" class="w-6 h-6 rounded-lg">
+        Tap<span class="text-brand-600">Kit</span>
       </span>
       <button type="button" onclick="toggleTheme()" class="p-2 -mr-2 rounded-xl" title="{{ __('nav.toggle_theme') }}" aria-label="{{ __('nav.toggle_theme') }}">
         <span class="material-symbols-outlined dark:hidden">dark_mode</span>
@@ -117,25 +111,6 @@
     </div>
   </main>
 </div>
-
-{{-- ========== BOTTOM NAV (mobile) ========== --}}
-@if ($showBottomNav)
-  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/90 backdrop-blur border-t border-card-border safe-b" aria-label="{{ __('nav.main_nav') }}">
-    <div class="grid grid-cols-5 gap-1 px-2 pt-2 pb-2">
-      @foreach ($bottom as $n)
-        @php $on = request()->routeIs($n['match']); @endphp
-        <a href="{{ route($n['route']) }}" @if ($on) aria-current="page" @endif class="js-nav flex flex-col items-center gap-1 text-[10px] font-bold {{ $on ? 'text-slate-900' : 'text-slate-400' }}">
-          <span class="h-8 w-14 rounded-full grid place-items-center transition {{ $on ? 'bg-lime-accent text-slate-950' : '' }}"><span class="material-symbols-outlined {{ $on ? 'fill-1' : '' }}">{{ $n['icon'] }}</span></span>
-          {{ $bottomShort[$n['route']] }}
-        </a>
-      @endforeach
-      <button type="button" id="menuBtn2" class="flex flex-col items-center gap-1 text-[10px] font-bold text-slate-400">
-        <span class="h-8 w-14 rounded-full grid place-items-center"><span class="material-symbols-outlined">apps</span></span>
-        {{ __('nav.menu') }}
-      </button>
-    </div>
-  </nav>
-@endif
 
 <style>
   .nav-group.is-collapsed .nav-group-body { display: none; }
@@ -172,7 +147,7 @@
     bd.classList.toggle('hidden', !open);
     document.body.style.overflow = open ? 'hidden' : '';
   };
-  ['menuBtn', 'menuBtn2'].forEach((id) => document.getElementById(id)?.addEventListener('click', () => setMenu(!isOpen())));
+  ['menuBtn'].forEach((id) => document.getElementById(id)?.addEventListener('click', () => setMenu(!isOpen())));
   document.getElementById('closeMenu')?.addEventListener('click', () => setMenu(false));
   bd.addEventListener('click', () => setMenu(false));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) setMenu(false); });

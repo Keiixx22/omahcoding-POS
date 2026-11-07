@@ -122,7 +122,7 @@ class Business extends Model
 
     public function unusableReason(): string
     {
-        return 'Akun bisnis ini ditangguhkan. Hubungi dukungan CashierStore.';
+        return 'Akun bisnis ini ditangguhkan. Hubungi dukungan TapKit.';
     }
 
     /** ID Toko unik, contoh: CS-ORELY-8804 */

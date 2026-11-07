@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <title>Masuk · CashierStore</title>
+  <title>Masuk · TapKit</title>
   @include('partials.head')
 </head>
 <body class="min-h-screen grid place-items-center p-4 bg-linear-to-br from-canvas to-brand-50">
@@ -13,9 +13,9 @@
 <div class="w-full max-w-5xl grid lg:grid-cols-2 card overflow-hidden rounded-3xl shadow-xl">
   <div class="p-8 md:p-12">
     <div class="flex items-center gap-3 mb-8">
-      <div class="w-11 h-11 rounded-xl bg-brand-600 text-white grid place-items-center"><span class="material-symbols-outlined">shopping_cart</span></div>
+      <img src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="44" height="44" class="w-11 h-11 rounded-xl shrink-0">
       <div class="leading-tight">
-        <div class="font-extrabold text-lg">CashierStore</div>
+        <div class="font-extrabold text-lg">TapKit</div>
         <div class="text-xs text-slate-500">{{ config('pos.store_name') }} Management Portal</div>
       </div>
     </div>

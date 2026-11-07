@@ -13,7 +13,7 @@
 
     <span class="eyebrow">Pemulihan akun</span>
     <h1>Buat kata sandi baru</h1>
-    <p class="lead">Atur kata sandi baru untuk akun CashierStore Anda. Gunakan kombinasi yang kuat dan mudah diingat.</p>
+    <p class="lead">Atur kata sandi baru untuk akun TapKit Anda. Gunakan kombinasi yang kuat dan mudah diingat.</p>
 
     @if ($errors->any())
         <div class="alert alert-err" role="alert">

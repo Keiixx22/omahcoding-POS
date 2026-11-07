@@ -7,7 +7,7 @@
 @endphp
 <div class="mb-6">
   <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Ringkasan platform</h1>
-  <p class="text-sm font-medium text-slate-500 mt-1">Semua toko di CashierStore, dari sisi pemilik platform.</p>
+  <p class="text-sm font-medium text-slate-500 mt-1">Semua toko di TapKit, dari sisi pemilik platform.</p>
 </div>
 
 <div class="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 mb-5">

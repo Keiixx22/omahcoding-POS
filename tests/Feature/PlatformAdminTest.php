@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
- * Panel platform (pemilik CashierStore). Belum pernah dijalankan oleh penulis (PHP di lingkungan penyusunan
+ * Panel platform (pemilik TapKit). Belum pernah dijalankan oleh penulis (PHP di lingkungan penyusunan
  * lebih lama dari yang dibutuhkan framework) — jalankan:  php artisan test --filter=PlatformAdminTest
  * Login memakai alur asli (POST /platform/login), BUKAN actingAs(..., 'platform'): actingAs memanggil
  * Auth::shouldUse() sehingga guard default berubah dan tidak lagi meniru produksi.
