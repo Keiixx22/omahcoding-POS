@@ -64,6 +64,8 @@ class IngredientController extends Controller
             'is_active' => ['nullable', 'boolean'],
         ]);
 
+        $before = $ingredient->only(['name', 'unit', 'min_stock', 'cost_per_unit']);
+
         $ingredient->update([
             'name' => $data['name'],
             'unit' => $data['unit'],
@@ -72,7 +74,30 @@ class IngredientController extends Controller
             'is_active' => $request->boolean('is_active', true),
         ]);
 
+        AuditLog::record('ingredient.updated', $ingredient->name, [
+            'before' => $before,
+            'after' => $ingredient->only(['name', 'unit', 'min_stock', 'cost_per_unit']),
+        ]);
+
         return redirect()->route('ingredients.index')->with('success', "Bahan baku {$ingredient->name} diperbarui.");
+    }
+
+    public function destroy(Ingredient $ingredient)
+    {
+        $name = $ingredient->name;
+
+        // Bahan yang masih dipakai resep tidak boleh dihapus: resepnya akan ikut hilang dan stok menu berhenti terpotong.
+        $used = $ingredient->recipes()->count();
+        if ($used > 0) {
+            return back()->withErrors(['delete' => "Bahan {$name} masih dipakai di {$used} resep. Hapus dari resep produk terlebih dahulu."]);
+        }
+
+        $stock = (float) $ingredient->stock;
+        $ingredient->delete();
+
+        AuditLog::record('ingredient.deleted', $name, ['stock_at_delete' => $stock]);
+
+        return redirect()->route('ingredients.index')->with('success', "Bahan baku {$name} dihapus.");
     }
 
     public function adjust(Request $request, Ingredient $ingredient)

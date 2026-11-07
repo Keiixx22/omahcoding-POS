@@ -64,6 +64,8 @@
                     if (!v) return 'Kota / lokasi operasional wajib diisi.';
                     if (v.length < 3) return 'Lokasi minimal 3 karakter.';
                     if (v.length > 120) return 'Lokasi maksimal 120 karakter.';
+                    if (!/^[\p{L}\p{N}\s.,-]+$/u.test(v)) return 'Lokasi hanya boleh berisi huruf, angka, spasi, titik, koma atau tanda hubung.';
+                    if ((v.match(/\p{L}/gu) || []).length < 3) return 'Lokasi harus berisi nama kota atau tempat yang valid.';
                     return '';
                 },
             };

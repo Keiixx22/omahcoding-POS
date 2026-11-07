@@ -25,7 +25,7 @@
     body:has(#doneModal:not(.hidden), #qrisModal:not(.hidden), #qrisManualModal:not(.hidden), #variantModal:not(.hidden), #custModal:not(.hidden)) #voiceRoot #voiceMic { width: 2.5rem; height: 2.5rem; }
   }
 </style>
-<div id="voiceRoot" class="fixed z-[60] bottom-20 right-4 lg:bottom-6 lg:right-6 flex flex-col items-end gap-2 pointer-events-none">
+<div id="voiceRoot" class="fixed z-[60] {{ request()->routeIs('pos') ? 'bottom-20' : 'bottom-5' }} right-4 lg:bottom-6 lg:right-6 flex flex-col items-end gap-2 pointer-events-none">
   <div id="voiceToast" class="hidden pointer-events-auto max-w-[min(22rem,calc(100vw-2rem))] rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700 px-4 py-3 text-sm">
     <div id="voiceToastText" class="font-semibold leading-snug"></div>
     <div id="voiceToastBtns" class="hidden mt-3 flex gap-2">
@@ -70,7 +70,7 @@
         </ul></div>
       <div><div class="font-bold mb-1">Semua halaman</div>
         <ul class="list-disc pl-5 space-y-1 text-slate-600">
-          <li>"buka dashboard / kasir / laporan / shift / produk / bahan baku / stok barang / pelanggan / staff / pengaturan / audit log / kantor / panduan"</li>
+          <li>"buka dashboard / kasir / laporan / shift / produk / bahan baku / stok barang / pelanggan / staff / pengaturan / audit log / panduan"</li>
           <li>"kembali" Â· "muat ulang"</li>
           <li>"mode gelap" · "mode terang"</li>
           <li>"bantuan" · "berhenti mendengarkan"</li>
@@ -197,7 +197,7 @@
   /* ---------- Perintah global ---------- */
   const NAV_ALIAS = { dashboard: ['dashboard', 'beranda', 'utama'], pos: ['kasir', 'pos', 'order line', 'order', 'pesanan', 'transaksi'],
     'reports.index': ['laporan', 'report', 'penjualan'], 'products.index': ['produk', 'barang', 'menu'], 'stock.index': ['stok', 'stock', 'persediaan'],
-    'customers.index': ['pelanggan', 'customer', 'member'], 'staff.index': ['staff', 'staf', 'karyawan', 'pegawai'], office: ['kantor', 'office', 'kantor virtual'] };
+    'customers.index': ['pelanggan', 'customer', 'member'], 'staff.index': ['staff', 'staf', 'karyawan', 'pegawai'] };
 
   /* ---- Navigasi suara: semua tab sidebar, pilih alias terpanjang yang cocok ---- */
   Object.assign(NAV_ALIAS, {
@@ -212,7 +212,6 @@
     'staff.index': ['staff', 'staf', 'karyawan', 'pegawai'],
     'settings.edit': ['pengaturan', 'setelan', 'setting', 'settings', 'seting'],
     'audit.index': ['audit log', 'audit', 'log aktivitas', 'riwayat aktivitas'],
-    office: ['kantor virtual', 'kantor', 'office'],
     help: ['buku panduan', 'panduan', 'tutorial', 'manual'],
   });
   const NAV_TRIGGER = /\b(?:buka|bukakan|bukain|pergi ke|masuk ke|pindah ke|menuju|ke halaman|ke tab|halaman|tab)\s+(?:halaman\s+|tab\s+|menu\s+)?(.+)$/;

@@ -12,7 +12,6 @@ return [
     'staff' => 'Staff',
     'settings' => 'Settings',
     'audit' => 'Audit Log',
-    'office' => 'Virtual Office',
     'help' => 'Guide',
     'group_overview' => 'Overview',
     'group_management' => 'Management',

@@ -112,7 +112,7 @@ class ChatAiService
         $text = trim((string) preg_replace('/<!--.*?-->/s', '', $text));   // buang catatan TODO
 
         return $text !== '' ? $text
-            : 'Kamu asisten customer service CashierStore. Jawab singkat. Jangan mengarang; kalau tidak yakin, arahkan ke admin.';
+            : 'Kamu asisten customer service TapKit. Jawab singkat. Jangan mengarang; kalau tidak yakin, arahkan ke admin.';
     }
 
     private function callProvider(array $provider, array $messages): ?string

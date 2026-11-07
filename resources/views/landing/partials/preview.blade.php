@@ -12,7 +12,7 @@
     <div class="frame rv">
         <div class="flex items-center gap-2 px-5 py-3.5 border-b border-edge bg-panel">
             <span class="w-3 h-3 rounded-full bg-[#34364F]"></span><span class="w-3 h-3 rounded-full bg-[#34364F]"></span><span class="w-3 h-3 rounded-full bg-neon"></span>
-            <span class="ml-3 text-xs font-semibold text-slate-400">CashierStore</span>
+            <span class="ml-3 text-xs font-semibold text-slate-400">TapKit</span>
         </div>
         <div class="p-4 sm:p-6 min-h-[22rem]">
             <!-- Kasir -->

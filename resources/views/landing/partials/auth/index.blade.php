@@ -56,7 +56,7 @@
                 <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Mulai Digitalisasi Usaha
                     Anda</h2>
                 <p class="text-slate-600 text-sm sm:text-base">Daftarkan usaha Anda, pilih kategori yang tepat,
-                    konfirmasi data, lalu langsung masuk ke dashboard kasir CashierStore.</p>
+                    konfirmasi data, lalu langsung masuk ke dashboard kasir TapKit.</p>
             </div>
 
             <div class="bg-white rounded-none sm:rounded-3xl sm:shadow-xl border-y sm:border border-slate-200/90 overflow-hidden -mx-3 sm:mx-0">

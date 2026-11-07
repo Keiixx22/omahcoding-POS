@@ -7,8 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#0E0F1A">
     <meta name="robots" content="noindex, nofollow">
-    <title>@yield('title') | CashierStore</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23D2F839'/%3E%3Cpath d='M8 10h16v4H8zm0 6h16v6H8z' fill='%23181829'/%3E%3C/svg%3E">
+    <title>@yield('title') | TapKit</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('img/tapkit-icon.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,8 +35,7 @@
         /* topbar */
         .topbar { width:100%; max-width:72rem; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.25rem 0 0; }
         .brand { display:inline-flex; align-items:center; gap:.65rem; font-weight:800; font-size:1.125rem; letter-spacing:-.01em; }
-        .brand-mark { width:2.25rem; height:2.25rem; border-radius:.75rem; background:var(--neon); color:#181829; display:flex; align-items:center; justify-content:center; box-shadow:0 0 18px rgba(210,248,57,.4); }
-        .brand-mark svg { width:1.25rem; height:1.25rem; fill:currentColor; }
+        .brand-mark { width:2.25rem; height:2.25rem; border-radius:.75rem; box-shadow:0 0 18px rgba(210,248,57,.4); }
         .brand b { color:var(--neon); font-weight:800; }
         .toplink { display:inline-flex; align-items:center; gap:.4rem; font-size:.8125rem; font-weight:700; color:#C5C8D8; padding:.5rem .75rem; border-radius:999px; border:1px solid transparent; transition:color .2s, border-color .2s; }
         .toplink:hover { color:var(--neon); border-color:var(--edge); }
@@ -123,11 +122,9 @@
 
     <div class="shell">
         <header class="topbar">
-            <a href="{{ route('landing') }}" class="brand" aria-label="CashierStore beranda">
-                <span class="brand-mark">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6a2 2 0 012-2h12a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm0 6h16v8a2 2 0 01-2 2H6a2 2 0 01-2-2v-8zm5 3a1 1 0 000 2h6a1 1 0 100-2H9z" /></svg>
-                </span>
-                <span>Cashier<b>Store</b></span>
+            <a href="{{ route('landing') }}" class="brand" aria-label="TapKit beranda">
+                <img class="brand-mark" src="{{ asset('img/tapkit-icon.svg') }}" alt="" width="36" height="36">
+                <span>Tap<b>Kit</b></span>
             </a>
             <a href="{{ route('login') }}" class="toplink">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" /></svg>
@@ -141,7 +138,7 @@
             </section>
         </main>
 
-        <p class="foot">&copy; {{ date('Y') }} CashierStore. All rights reserved.</p>
+        <p class="foot">&copy; {{ date('Y') }} TapKit. All rights reserved.</p>
     </div>
 
     @stack('scripts')

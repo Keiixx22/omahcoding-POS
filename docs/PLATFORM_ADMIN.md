@@ -1,4 +1,4 @@
-# Panel Admin Platform CashierStore
+# Panel Admin Platform TapKit
 
 Dokumen ini menjelaskan apa yang sudah dibuat, cara memasangnya, keputusan desainnya, dan rencana berikutnya.
 Branch: `feature/platform-admin`.

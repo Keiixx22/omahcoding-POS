@@ -26,7 +26,7 @@
     @else
         <span class="eyebrow">Pemulihan akun</span>
         <h1>Lupa kata sandi?</h1>
-        <p class="lead">Masukkan email akun CashierStore Anda. Kami kirim tautan untuk mengatur ulang kata sandi.</p>
+        <p class="lead">Masukkan email akun TapKit Anda. Kami kirim tautan untuk mengatur ulang kata sandi.</p>
 
         @if ($errors->any())
             <div class="alert alert-err" role="alert">

@@ -6,12 +6,12 @@
         <span class="cs-badge" id="cs-badge" hidden></span>
     </button>
 
-    <section id="cs-panel" class="cs-panel" role="dialog" aria-label="Chat bantuan CashierStore" hidden>
+    <section id="cs-panel" class="cs-panel" role="dialog" aria-label="Chat bantuan TapKit" hidden>
         <header class="cs-head">
             <span class="cs-avatar" aria-hidden="true"><span class="material-symbols-outlined">support_agent</span></span>
             <div class="cs-title">
                 <strong>Mirae</strong>
-                <span id="cs-status" class="cs-status" role="status" data-state="ai">AI CashierStore</span>
+                <span id="cs-status" class="cs-status" role="status" data-state="ai">AI TapKit</span>
             </div>
             <button type="button" id="cs-close" class="cs-x" aria-label="Tutup chat"><span class="material-symbols-outlined" aria-hidden="true">close</span></button>
         </header>
@@ -100,7 +100,7 @@
     const SEND_URL = root.dataset.sendUrl, POLL_URL = root.dataset.pollUrl;
     const KEY = 'cs_chat_token', TOKEN_RE = /^[A-Za-z0-9]{40}$/;
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
-    const WELCOME = 'Halo, aku Mirae, AI CashierStore! Tanya soal fitur, cara mulai, atau pembayaran. Kalau perlu, admin kami bisa ikut membalas di sini.';
+    const WELCOME = 'Halo, aku Mirae, AI TapKit! Tanya soal fitur, cara mulai, atau pembayaran. Kalau perlu, admin kami bisa ikut membalas di sini.';
 
     // localStorage bisa dimatikan (mode privat / kebijakan browser): semua akses dibungkus try/catch
     const store = {
@@ -143,7 +143,7 @@
     function applyStatus() {
         const closed = status === 'closed';
         const waitingAi = sending && status === 'ai';
-        statusEl.textContent = closed ? 'Percakapan ditutup' : status === 'human' ? 'Admin sedang menangani' : waitingAi ? 'Mirae sedang mengetik...' : 'AI CashierStore';
+        statusEl.textContent = closed ? 'Percakapan ditutup' : status === 'human' ? 'Admin sedang menangani' : waitingAi ? 'Mirae sedang mengetik...' : 'AI TapKit';
         statusEl.dataset.state = closed ? 'closed' : status;
         form.hidden = closed || capped;
         newBtn.hidden = !(closed || capped);

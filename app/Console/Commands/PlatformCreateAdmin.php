@@ -18,7 +18,7 @@ class PlatformCreateAdmin extends Command
 {
     protected $signature = 'platform:create-admin {email : Email admin} {--name= : Nama (wajib untuk admin baru)} {--reset : Reset password admin yang sudah ada}';
 
-    protected $description = 'Buat admin platform CashierStore, atau reset password-nya';
+    protected $description = 'Buat admin platform TapKit, atau reset password-nya';
 
     public function handle(): int
     {

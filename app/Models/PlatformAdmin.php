@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * Admin platform CashierStore (pemilik / partner). BUKAN user toko: tidak punya business_id dan
+ * Admin platform TapKit (pemilik / partner). BUKAN user toko: tidak punya business_id dan
  * tidak memakai trait BelongsToBusiness. Login lewat guard "platform".
  */
 class PlatformAdmin extends Authenticatable

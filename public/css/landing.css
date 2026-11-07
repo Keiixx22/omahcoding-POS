@@ -1,4 +1,4 @@
-/* CashierStore landing, simple version. One calm column, big type, plain words. Self-hosted font. */
+/* TapKit landing, simple version. One calm column, big type, plain words. Self-hosted font. */
 @font-face{font-family:"Plus Jakarta Sans";src:url("../fonts/PlusJakartaSans-variable.woff2") format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
 :root{--canvas:#F1F3F6;--surface:#fff;--ink:#11121C;--night:#181829;--lime:#D2F839;--green:#14532D;--line:#E8ECF2;--mist:#CBD2E3;--muted:#565B76;--warn:#FFB4A8;--r:12px;--pad:24px}
 *,*::before,*::after{box-sizing:border-box}

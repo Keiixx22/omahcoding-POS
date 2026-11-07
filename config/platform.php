@@ -18,5 +18,5 @@ return [
     'idle_timeout_minutes' => (int) env('PLATFORM_IDLE_TIMEOUT', 30),
 
     // Nama yang tampil di aplikasi authenticator.
-    'issuer' => env('PLATFORM_2FA_ISSUER', 'CashierStore Platform'),
+    'issuer' => env('PLATFORM_2FA_ISSUER', 'TapKit Platform'),
 ];

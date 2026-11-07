@@ -79,6 +79,12 @@
                 <a href="{{ route('ingredients.history', $ing) }}" class="btn-ghost !h-8 !px-3 text-xs text-slate-600 hover:text-slate-900" title="Riwayat Mutasi">
                   <span class="material-symbols-outlined !text-base">history</span>
                 </a>
+                <button type="button" onclick="openEdit({{ json_encode($ing->only(['id', 'name', 'unit', 'min_stock', 'cost_per_unit'])) }})" class="btn-ghost !h-8 !px-3 text-xs text-slate-600 hover:text-slate-900" title="Edit Bahan" aria-label="Edit {{ $ing->name }}">
+                  <span class="material-symbols-outlined !text-base">edit</span>
+                </button>
+                <button type="button" onclick="openDelete({{ json_encode(['id' => $ing->id, 'name' => $ing->name, 'stock' => (float) $ing->stock, 'unit' => $ing->unit]) }})" class="btn-ghost !h-8 !px-3 text-xs text-red-600 hover:text-red-700" title="Hapus Bahan" aria-label="Hapus {{ $ing->name }}">
+                  <span class="material-symbols-outlined !text-base">delete</span>
+                </button>
               </td>
             </tr>
           @empty
@@ -173,7 +179,78 @@
   </div>
 </div>
 
+{{-- Modal Edit Bahan --}}
+<div id="editModal" class="hidden fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm grid items-center justify-center p-4">
+  <div class="card w-full max-w-md p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-extrabold text-lg" id="editTitle">Edit Bahan Baku</h3>
+      <button type="button" onclick="document.getElementById('editModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600" aria-label="Tutup"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <form id="editForm" method="POST" class="space-y-4">
+      @csrf
+      @method('PUT')
+      <div>
+        <label class="label">Nama Bahan *</label>
+        <input id="editName" name="name" class="input" maxlength="100" required>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="label">Satuan *</label>
+          <input id="editUnit" name="unit" class="input" maxlength="20" required>
+        </div>
+        <div>
+          <label class="label">Harga Pokok per Satuan (Rp) *</label>
+          <input id="editCost" name="cost_per_unit" type="number" step="0.01" min="0" class="input" required>
+        </div>
+      </div>
+      <div>
+        <label class="label">Peringatan Minimum</label>
+        <input id="editMin" name="min_stock" type="number" step="0.01" min="0" class="input" required>
+      </div>
+      <p class="text-xs text-slate-500">Jumlah stok tidak diubah di sini. Pakai tombol <b>Sesuaikan</b> untuk stok masuk, keluar, atau opname. Kalau satuan diganti, pastikan jumlah di resep produk ikut disesuaikan.</p>
+      <div class="pt-2 flex justify-end gap-2">
+        <button type="button" onclick="document.getElementById('editModal').classList.add('hidden')" class="btn-ghost">Batal</button>
+        <button type="submit" class="btn-primary">Simpan Perubahan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{-- Modal Hapus Bahan --}}
+<div id="deleteModal" class="hidden fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm grid items-center justify-center p-4">
+  <div class="card w-full max-w-md p-6">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-extrabold text-lg">Hapus Bahan Baku?</h3>
+      <button type="button" onclick="document.getElementById('deleteModal').classList.add('hidden')" class="text-slate-400 hover:text-slate-600" aria-label="Tutup"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <p class="text-sm text-slate-600" id="delText"></p>
+    <p class="text-xs text-slate-500 mt-2">Riwayat mutasi stok bahan ini ikut terhapus. Bahan yang masih dipakai di resep tidak bisa dihapus.</p>
+    <form id="delForm" method="POST" class="pt-4 flex justify-end gap-2">
+      @csrf
+      @method('DELETE')
+      <button type="button" onclick="document.getElementById('deleteModal').classList.add('hidden')" class="btn-ghost">Batal</button>
+      <button type="submit" class="btn-primary !bg-red-600 !text-white hover:!bg-red-700">Ya, Hapus</button>
+    </form>
+  </div>
+</div>
+
 <script>
+  const INGREDIENT_URL = @json(route('ingredients.update', '__ID__'));
+  function openEdit(ing) {
+    document.getElementById('editTitle').textContent = 'Edit: ' + ing.name;
+    document.getElementById('editForm').action = INGREDIENT_URL.replace('__ID__', ing.id);
+    document.getElementById('editName').value = ing.name;
+    document.getElementById('editUnit').value = ing.unit;
+    document.getElementById('editCost').value = ing.cost_per_unit;
+    document.getElementById('editMin').value = ing.min_stock;
+    document.getElementById('editModal').classList.remove('hidden');
+  }
+  function openDelete(ing) {
+    const left = ing.stock > 0 ? ' Stok yang tersisa (' + ing.stock + ' ' + ing.unit + ') ikut hilang dari catatan.' : '';
+    document.getElementById('delText').textContent = 'Bahan "' + ing.name + '" akan dihapus.' + left;
+    document.getElementById('delForm').action = INGREDIENT_URL.replace('__ID__', ing.id);
+    document.getElementById('deleteModal').classList.remove('hidden');
+  }
   function openAdjust(ing) {
     document.getElementById('adjTitle').textContent = 'Sesuaikan: ' + ing.name;
     document.getElementById('adjUnit').textContent = ing.unit;

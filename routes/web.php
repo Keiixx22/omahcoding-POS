@@ -8,7 +8,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\MidtransWebhookController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PosController;
@@ -72,7 +71,6 @@ Route::middleware('guest')->group(function () {
 /* ---------- Auth (admin & kasir); "account" = cek akun/bisnis masih aktif di tiap request ---------- */
 Route::middleware(['auth', 'account'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/office', [OfficeController::class, 'index'])->name('office');
     Route::get('/help', [HelpController::class, 'index'])->name('help');
 
     // Kasir / POS
@@ -118,6 +116,7 @@ Route::middleware(['auth', 'account'])->group(function () {
         Route::get('/ingredients', [IngredientController::class, 'index'])->name('ingredients.index');
         Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');
         Route::put('/ingredients/{ingredient}', [IngredientController::class, 'update'])->name('ingredients.update');
+        Route::delete('/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('ingredients.destroy');
         Route::post('/ingredients/{ingredient}/adjust', [IngredientController::class, 'adjust'])->name('ingredients.adjust');
         Route::get('/ingredients/{ingredient}/history', [IngredientController::class, 'history'])->name('ingredients.history');
 
@@ -142,7 +141,7 @@ Route::middleware(['auth', 'account'])->group(function () {
     });
 });
 
-/* ---------- Panel platform (pemilik CashierStore). Guard "platform", terpisah dari user toko.
+/* ---------- Panel platform (pemilik TapKit). Guard "platform", terpisah dari user toko.
               Tidak ditautkan dari halaman publik. Opsional dikunci ke IP tertentu: PLATFORM_ALLOWED_IPS ---------- */
 Route::prefix('platform')->name('platform.')->middleware('platform.ip')->group(function () {
     Route::middleware('guest:platform')->group(function () {
