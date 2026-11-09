@@ -1065,7 +1065,7 @@ if (window.Voice) {
   };
   const dropLines = (p, key) => { for (let i = cart.length - 1; i >= 0; i--) if (cart[i].product_id === p.id && (!key || cart[i].key === key)) cart.splice(i, 1); };
 
-  // "cek stok roti" Â· "stok menipis" Â· "bahan apa yang habis"
+  // "cek stok roti" · "stok menipis" · "bahan apa yang habis"
   function stockQuery(t) {
     const listAsk = (/\b(menipis|tipis|habis|abis)\b/.test(t) && /\b(stok|bahan)\b/.test(t)) || /^(?:cek |lihat )?(?:sisa )?stok(?: bahan(?: baku)?)?$/.test(t);
     const qm = t.match(/^(?:cek |lihat )?(?:sisa )?stok\s+(.+)$/);
@@ -1145,7 +1145,7 @@ if (window.Voice) {
     const lines = [];
     if (done.length) lines.push((removing || setting ? 'Diubah: ' : 'Ditambahkan: ') + done.join(', ') + '. ' + tot.show);
     if (extra.length) lines.push(extra.join('. '));
-    V.say(lines.join(' Â· '), (done.length ? (removing || setting ? 'Diubah. ' : 'Ditambahkan. ') + done.join(', ') + '. ' + tot.say + '. ' : '') + extra.join('. '));
+    V.say(lines.join(' · '), (done.length ? (removing || setting ? 'Diubah. ' : 'Ditambahkan. ') + done.join(', ') + '. ' + tot.say + '. ' : '') + extra.join('. '));
     return true;
   }
 

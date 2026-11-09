@@ -31,7 +31,17 @@ class ChatAiService
 
         $messages = $this->buildMessages($history);
 
+        // Batas total waktu menunggu AI: pengunjung tidak menunggu provider utama DAN cadangan masing-masing penuh.
+        $deadline = microtime(true) + max(3, (int) config('services.ai.total_budget', 14));
+
         foreach ($providers as $provider) {
+            $remaining = $deadline - microtime(true);
+            if ($remaining < 2) {
+                Log::warning('chat.ai.budget_exhausted');
+
+                return null;
+            }
+
             // Kuota global per hari dihitung per panggilan HTTP, supaya kuota gratis tidak habis oleh satu penyerang.
             if (! $this->reserveDailyCall()) {
                 Log::warning('chat.ai.daily_limit_reached');
@@ -39,7 +49,7 @@ class ChatAiService
                 return null;
             }
 
-            $text = $this->callProvider($provider, $messages);
+            $text = $this->callProvider($provider, $messages, $remaining);
             if ($text !== null) {
                 return $text;
             }
@@ -115,9 +125,9 @@ class ChatAiService
             : 'Kamu asisten customer service TapKit. Jawab singkat. Jangan mengarang; kalau tidak yakin, arahkan ke admin.';
     }
 
-    private function callProvider(array $provider, array $messages): ?string
+    private function callProvider(array $provider, array $messages, float $remaining): ?string
     {
-        $timeout = min(10, max(2, (int) config('services.ai.timeout', 8)));
+        $timeout = (int) max(2, min(10, (int) config('services.ai.timeout', 8), floor($remaining)));
         $host = parse_url($provider['base_url'], PHP_URL_HOST);
 
         $payload = [
@@ -126,7 +136,11 @@ class ChatAiService
             'max_tokens' => (int) config('services.ai.max_tokens', 400),
             'temperature' => 0.3,
         ];
-        if ($effort = config('services.ai.reasoning_effort')) {
+        // Model "thinking" yang dibiarkan berpikir penuh terasa lambat untuk chat CS. Gemini (OpenAI-compatible)
+        // mengenal reasoning_effort, jadi default-nya "low" di sana. Provider lain: isi AI_REASONING_EFFORT sendiri.
+        $effort = config('services.ai.reasoning_effort')
+            ?: ($host === 'generativelanguage.googleapis.com' ? 'low' : null);
+        if ($effort) {
             $payload['reasoning_effort'] = $effort;
         }
 
@@ -146,7 +160,8 @@ class ChatAiService
 
             // Ulang satu kali hanya untuk error server sesaat (5xx) yang gagal cepat. 429 langsung pindah provider.
             $fast = (microtime(true) - $started) < 3;
-            if ($attempt === 1 && $fast && in_array($res->status(), [500, 502, 503, 504], true)) {
+            $hasTime = (microtime(true) - $started) + 0.4 < $timeout - 2;   // sisa waktu cukup untuk satu percobaan lagi
+            if ($attempt === 1 && $fast && $hasTime && in_array($res->status(), [500, 502, 503, 504], true)) {
                 usleep(400_000);
 
                 continue;

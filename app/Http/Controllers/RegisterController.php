@@ -83,7 +83,6 @@ class RegisterController extends Controller
                 'outlet_count' => $data['outlet_count'],
                 'status' => 'active',
                 'mode' => $category->default_mode ?? 'fnb',
-                'trial_ends_at' => null,
             ]);
 
             $owner = User::create([

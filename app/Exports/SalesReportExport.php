@@ -4,10 +4,11 @@ namespace App\Exports;
 
 use App\Models\Order;
 use App\Services\SalesReport;
+use Maatwebsite\Excel\Concerns\Export;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 /** Excel 3 sheet: Ringkasan, Transaksi, Per Produk */
-class SalesReportExport implements WithMultipleSheets
+class SalesReportExport implements Export, WithMultipleSheets
 {
     public function __construct(private SalesReport $report) {}
 

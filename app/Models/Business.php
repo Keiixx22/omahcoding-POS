@@ -12,7 +12,7 @@ class Business extends Model
 
     protected $fillable = [
         'business_category_id', 'code', 'name', 'owner_name', 'email', 'phone',
-        'location', 'outlet_count', 'status', 'mode', 'trial_ends_at',
+        'location', 'outlet_count', 'status', 'mode',
         'tax_rate', 'tax_label', 'receipt_footer',
     ];
 
@@ -21,7 +21,7 @@ class Business extends Model
 
     protected function casts(): array
     {
-        return ['trial_ends_at' => 'datetime', 'tax_rate' => 'float', 'midtrans_server_key' => 'encrypted', 'qris_require_ref' => 'boolean', 'shift_enabled' => 'boolean',
+        return ['tax_rate' => 'float', 'midtrans_server_key' => 'encrypted', 'qris_require_ref' => 'boolean', 'shift_enabled' => 'boolean',
             'receipt_print_enabled' => 'boolean', 'receipt_auto_print' => 'boolean', 'receipt_paper' => 'integer'];
     }
 
@@ -113,11 +113,6 @@ class Business extends Model
     public function isUsable(): bool
     {
         return $this->status !== 'suspended';
-    }
-
-    public function isTrialExpired(): bool
-    {
-        return false;
     }
 
     public function unusableReason(): string

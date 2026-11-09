@@ -43,7 +43,7 @@ class TenantIsolationTest extends TestCase
 
         return Business::create([
             'business_category_id' => $cat->id, 'code' => $code, 'name' => 'Toko ' . $code, 'owner_name' => 'Owner',
-            'email' => strtolower($code) . '@t.test', 'status' => 'active', 'trial_ends_at' => null,
+            'email' => strtolower($code) . '@t.test', 'status' => 'active',
         ]);
     }
 

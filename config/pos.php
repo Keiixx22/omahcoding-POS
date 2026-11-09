@@ -10,7 +10,6 @@ return [
     'cashier_max_discount_pct' => (float) env('POS_CASHIER_MAX_DISCOUNT_PCT', 10),  // diskon manual kasir, % dari subtotal (admin tanpa batas)
     'require_shift' => (bool) env('POS_REQUIRE_SHIFT', true),                        // (usang) kini diatur per bisnis di Pengaturan (businesses.shift_enabled)
     'point_value' => (int) env('POS_POINT_VALUE', 100),                              // Rp per 1 poin saat ditukar
-    'enforce_trial' => (bool) env('POS_ENFORCE_TRIAL', false),                       // kunci akun saat masa trial habis
     'csp_mode' => env('POS_CSP_MODE', 'report'),                                     // report | enforce | off
     'receipt_footer' => env('POS_RECEIPT_FOOTER', 'Terima kasih, sampai jumpa lagi!'),
 ];
