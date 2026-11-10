@@ -52,7 +52,7 @@ class TableSheet extends DefaultValueBinder implements FromArray, WithTitle, Wit
 
     public function array(): array
     {
-        $out = [[$this->heading], [$this->period], [], $this->headers];
+        $out = [[$this->heading], [$this->period], [null], $this->headers];
         foreach ($this->rows as $row) $out[] = $row;
         if ($this->totals) $out[] = $this->totals;
 
@@ -69,7 +69,7 @@ class TableSheet extends DefaultValueBinder implements FromArray, WithTitle, Wit
         return $this->formats;
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): ?array
     {
         $last = Coordinate::stringFromColumnIndex(count($this->headers));
         $end = 4 + count($this->rows) + ($this->totals ? 1 : 0);

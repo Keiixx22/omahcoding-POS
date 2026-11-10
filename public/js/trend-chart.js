@@ -181,7 +181,7 @@
       var t = r.dine + r.take;
       if (r.count > 0 && t >= pv) { pv = t; peak = i; }
       return { x: r.label.slice(0, 2), fut: h > p.now,
-        title: r.label + ' Â· ' + r.count + ' pesanan',
+        title: r.label + ' · ' + r.count + ' pesanan',
         lines: [['Dine-in', fmtRp(r.dine), 'd'], ['Takeaway', fmtRp(r.take), 't']] };
     });
     return {
@@ -209,7 +209,7 @@
       if (r.date === p.today) nowIdx = i;
       if (tot[i] > 0 && tot[i] >= pv) { pv = tot[i]; peak = i; }
       return { x: long ? r.sm : r.j, fut: false,
-        title: r.full + ' Â· ' + r.orders + ' transaksi',
+        title: r.full + ' · ' + r.orders + ' transaksi',
         lines: [['Pendapatan', fmtRp(tot[i]), 'd'], ['Rata-rata 7 hari', fmtRp(ma[i]), 't']] };
     });
     return {

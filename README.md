@@ -72,7 +72,6 @@ Pengaturan toko dan keamanan dibaca dari `config/pos.php`:
 | `POS_CASHIER_MAX_DISCOUNT_PCT` | `10` | Batas diskon manual kasir (% dari subtotal). Admin tanpa batas |
 | `POS_REQUIRE_SHIFT` | `true` | Wajib buka shift sebelum menerima pembayaran |
 | `POS_POINT_VALUE` | `100` | Nilai Rp per 1 poin saat ditukar |
-| `POS_ENFORCE_TRIAL` | `false` | Kunci akun bisnis saat masa trial habis |
 | `POS_CSP_MODE` | `report` | `report`, `enforce`, atau `off` untuk Content-Security-Policy |
 | `POS_RECEIPT_FOOTER` | `Terima kasih…` | Teks bawah struk default |
 | `MIDTRANS_QRIS_ACQUIRER` | `gopay` | Acquirer QRIS Midtrans (opsional) |

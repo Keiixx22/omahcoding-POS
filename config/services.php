@@ -55,6 +55,7 @@ return [
             'model' => env('AI_FALLBACK_MODEL'),
         ],
         'timeout' => (int) env('AI_TIMEOUT', 8),             // detik per panggilan; dibatasi maks 10
+        'total_budget' => (int) env('AI_TOTAL_BUDGET', 14),  // detik, total untuk semua provider (utama + cadangan)
         'max_tokens' => (int) env('AI_MAX_TOKENS', 800),   // model "thinking" ikut memakai jatah ini; terlalu kecil = balasan kosong
         'context_messages' => (int) env('AI_CONTEXT_MESSAGES', 10),
         'daily_limit' => (int) env('AI_DAILY_LIMIT', 200),   // panggilan HTTP ke provider per hari, global

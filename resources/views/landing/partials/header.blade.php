@@ -16,7 +16,7 @@
                 <a href="{{ auth()->user()->isAdmin() ? route('dashboard') : route('pos') }}" class="btn-neon !h-10 !px-4 sm:!px-5 whitespace-nowrap">Buka dashboard</a>
             @else
                 <a href="#masuk" onclick="switchAuthTab('login')" class="text-sm font-bold text-slate-200 hover:text-neon px-2 sm:px-3 py-2">Masuk</a>
-                <a href="#auth-section" onclick="switchAuthTab('register')" class="btn-neon !h-10 !px-4 sm:!px-5 whitespace-nowrap">Coba gratis</a>
+                <a href="#auth-section" onclick="switchAuthTab('register')" class="btn-neon !h-10 !px-4 sm:!px-5 whitespace-nowrap">Daftar</a>
             @endauth
         </div>
     </div>

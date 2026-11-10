@@ -6,7 +6,7 @@ Branch: `feature/platform-admin`.
 ## 1. Apa ini
 
 Panel untuk **pemilik platform** (kamu dan partner), terpisah dari admin tiap toko. Admin toko mengelola satu
-bisnis. Admin platform melihat dan mengatur **semua** bisnis: siapa yang daftar, trial siapa yang habis,
+bisnis. Admin platform melihat dan mengatur **semua** bisnis: siapa yang daftar dan
 toko mana yang perlu ditangguhkan.
 
 - Alamat: **`/platform/login`** (setelah login: `/platform`). Tidak ditautkan dari landing page publik.
@@ -25,10 +25,10 @@ landing page, itu bisa ditambahkan (lihat bagian 7).
 | Bagian | Isi |
 | --- | --- |
 | Login | Email + password, tanpa "ingat saya", batas percobaan (5 per menit per email+IP, 15 per menit per IP, 10 per jam per email), waktu respons disamakan untuk email yang ada / tidak ada |
-| Ringkasan | Jumlah toko per status, pendaftar baru 7/30 hari, trial yang perlu ditindak, transaksi dan omzet bulan ini, toko terbesar, trial berakhir berikutnya, pendaftar terbaru |
-| Toko | Daftar dengan pencarian (nama, kode, email, pemilik), filter status dan "trial ≤ 7 hari", halaman detail |
+| Ringkasan | Jumlah toko per status, pendaftar baru 7/30 hari, transaksi dan omzet bulan ini, toko terbesar, pendaftar terbaru |
+| Toko | Daftar dengan pencarian (nama, kode, email, pemilik), filter status, halaman detail |
 | Detail toko | Profil, jumlah transaksi, omzet 30 hari dan total, daftar pengguna toko (dengan login terakhir), riwayat tindakan platform |
-| Tindakan toko | **Tangguhkan** (alasan wajib), **aktifkan kembali**, **jadikan Aktif**, **perpanjang trial** +7/14/30 hari. Penangguhan langsung berlaku: pengguna toko terlempar di request berikutnya |
+| Tindakan toko | **Tangguhkan** (alasan wajib), **aktifkan kembali**, **jadikan Aktif**. Penangguhan langsung berlaku: pengguna toko terlempar di request berikutnya |
 | Admin platform | Daftar admin, tambah admin (password sementara, wajib diganti saat login pertama), nonaktifkan / aktifkan |
 | Akun saya | Ganti password sendiri |
 | Audit log | Semua login dan tindakan admin platform, tidak bisa diubah atau dihapus dari aplikasi |
@@ -52,13 +52,9 @@ Lalu buka `https://domain-kamu/platform/login`.
 ### Pengaturan `.env`
 ```
 PLATFORM_ALLOWED_IPS=          # kosong = semua IP. Contoh: 203.0.113.7,198.51.100.0/24
-POS_ENFORCE_TRIAL=false        # lihat catatan di bawah
 ```
 - **`PLATFORM_ALLOWED_IPS`** hanya bekerja benar kalau IP asli terbaca. Di belakang Nginx / Cloudflare / load balancer
   set juga `TRUSTED_PROXIES` (perbaikan #2 dari review), kalau tidak semua orang terlihat berasal dari IP proxy.
-- **`POS_ENFORCE_TRIAL`**: bawaannya `false`, artinya toko yang trial-nya habis **tetap bisa dipakai** sampai kamu
-  menangguhkannya dari panel. Ringkasan platform menampilkan peringatan kuning selama ini `false`. Jika mau otomatis
-  terkunci saat trial habis, set `true`.
 
 ## 4. Cara kerja dan keputusan desain
 
@@ -119,7 +115,7 @@ routes/web.php             (grup /platform)
   platform lewat artisan.
 - Tidak ada **2FA**. Ini langkah keamanan berikutnya yang paling penting (bagian 7).
 - Tidak ada **tagihan / paket langganan**. "Aktif" artinya "kamu yang menandainya berbayar".
-- Penangguhan dan perpanjangan trial dilakukan manual.
+- Penangguhan dilakukan manual. Tidak ada masa percobaan (trial) di TapKit.
 - Nonaktifkan admin langsung menghentikan aksesnya di request berikutnya, tapi tidak ada tombol "keluarkan semua
   sesi" atau reset password admin lain dari panel.
 
@@ -129,8 +125,7 @@ routes/web.php             (grup /platform)
 2. **2FA (TOTP) untuk admin platform.** Panel ini bisa mengunci semua toko; password saja tidak cukup. Butuh
    satu paket TOTP dan kode pemulihan. Sebelum itu aktif, pakai `PLATFORM_ALLOWED_IPS` dan password panjang.
 3. **Batas waktu sesi lebih pendek** untuk platform (misal 30 menit idle) dan tombol "keluar dari semua perangkat".
-4. **Langganan dan tagihan**: paket (nama, harga, batas outlet/staff), tanggal berlaku, status bayar, pengingat
-   trial otomatis lewat email. Perlu keputusan harga dan metode bayar darimu.
+4. **Langganan dan tagihan**: paket (nama, harga, batas outlet/staff), tanggal berlaku, status bayar. Perlu keputusan harga dan metode bayar darimu.
 5. **Login sebagai pemilik toko (impersonation)** untuk dukungan: hanya admin platform, alasan wajib, banner
    merah di sisi toko, setiap aksi tercatat dengan penanda "oleh platform".
 6. **Dukungan toko**: reset password pemilik, kirim ulang kode toko, ubah email pemilik, ekspor / hapus data

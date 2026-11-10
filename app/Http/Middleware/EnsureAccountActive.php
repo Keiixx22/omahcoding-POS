@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 /**
  * Dicek di SETIAP request (bukan cuma saat login), sehingga:
  *  - kasir yang dinonaktifkan langsung terlempar, walau sesi / "ingat saya" masih hidup
- *  - bisnis yang di-suspend (atau trial habis, bila diaktifkan) langsung terkunci
+ *  - bisnis yang di-suspend langsung terkunci
  *  - akun yatim tanpa bisnis tidak bisa masuk
  */
 class EnsureAccountActive

@@ -34,7 +34,7 @@ class PlatformAdminTest extends TestCase
         return $this->post(route('platform.login.store'), ['email' => $a->email, 'password' => $password]);
     }
 
-    private function business(string $code, string $status = 'trial', ?string $trialEnds = '+10 days'): Business
+    private function business(string $code, string $status = 'active'): Business
     {
         $cat = BusinessCategory::first() ?? BusinessCategory::create([
             'slug' => 'cafe', 'name' => 'Cafe', 'icon' => 'x', 'color' => 'blue', 'tagline' => 't',
@@ -43,7 +43,7 @@ class PlatformAdminTest extends TestCase
 
         return Business::create([
             'business_category_id' => $cat->id, 'code' => $code, 'name' => 'Toko ' . $code, 'owner_name' => 'Owner',
-            'email' => Str::lower($code) . '@t.test', 'status' => $status, 'trial_ends_at' => $trialEnds ? now()->modify($trialEnds) : null,
+            'email' => Str::lower($code) . '@t.test', 'status' => $status,
         ]);
     }
 
@@ -129,7 +129,7 @@ class PlatformAdminTest extends TestCase
     public function test_dashboard_dan_daftar_toko_tampil(): void
     {
         $this->business('CS-AAA-1111', 'active');
-        $this->business('CS-BBB-2222', 'trial', '+3 days');
+        $this->business('CS-BBB-2222', 'suspended');
         $this->login($this->admin());
 
         $this->get(route('platform.dashboard'))->assertOk()->assertSee('Ringkasan platform');
