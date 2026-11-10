@@ -1,26 +1,186 @@
 # TapKit POS :)
 
-Aplikasi kasir (Point of Sale) multi-bisnis berbasis **Laravel**, dengan manajemen produk, stok, pelanggan loyalty, shift kasir, laporan penjualan, audit log, dan pembayaran **QRIS dinamis (Midtrans)**. Tampilan memakai desain *Luminescent Fintech* (sidebar gelap, aksen lime, mode terang/gelap) dan responsif untuk desktop, tablet, dan mobile.
+Aplikasi kasir (Point of Sale) **multi-bisnis** berbasis **Laravel**, dengan manajemen produk, stok, pelanggan loyalty, shift kasir, laporan penjualan, audit log, dan pembayaran **QRIS dinamis (Midtrans)**. Tampilan memakai desain *Luminescent Fintech* (sidebar gelap, aksen lime, mode terang/gelap) dan responsif untuk desktop, tablet, dan mobile.
 
-## Fitur
+Repo: <https://github.com/abelfavian21/omahcoding-POS>
 
-**Kasir**
-- Order Line: pilih menu, dine-in / takeaway, nomor meja, pelanggan member, diskon.
-- Metode bayar: tunai, QRIS, kartu. QRIS dinamis otomatis terkonfirmasi lewat Midtrans.
-- Struk PDF, perintah suara (bahasa Indonesia) untuk menambah menu dan membayar.
-- Shift kasir: modal awal, hitung uang di laci saat tutup, selisih kas tercatat otomatis.
+---
 
-**Manajemen**
-- Produk dan kategori, stok masuk/keluar/opname dengan riwayat lengkap.
-- Pelanggan: poin danriwayat kunjungan.
-- Laporan penjualan per periode: grafik harian, metode bayar, produk terlaris, laba kotor. Ekspor PDF dan Excel.
-- Void transaksi (stok dikembalikan), manajemen staff, pengaturan toko (pajak, teks struk).
-- Audit log aktivitas penting (login, void, diskon, shift, stok, ekspor, QRIS).
-- Dashboard: pendapatan, pesanan, rata-rata transaksi, grafik per jam, menu terlaris, stok menipis.
+## Daftar Isi
 
-**Multi-bisnis (multi-tenant)**
+1. [Akun siap pakai](#akun-siap-pakai)
+2. [Fitur lengkap](#fitur-lengkap)
+3. [Alur penggunaan (flow)](#alur-penggunaan-flow)
+4. [Teknologi](#teknologi)
+5. [Instalasi](#instalasi)
+6. [Konfigurasi `.env`](#konfigurasi-env)
+7. [Peran dan akses](#peran-dan-akses)
+8. [QRIS dinamis (Midtrans)](#qris-dinamis-midtrans)
+9. [Keamanan](#keamanan)
+10. [Struktur proyek](#struktur-proyek)
+11. [Desain dan tampilan](#desain-dan-tampilan)
+12. [Pemecahan masalah](#pemecahan-masalah)
+13. [Pengembangan lanjutan](#pengembangan-lanjutan-ide)
+14. [Lisensi](#lisensi)
+
+---
+
+## Akun siap pakai
+
+Gunakan akun berikut untuk langsung mencoba aplikasi (login lewat halaman login di landing page):
+
+| Peran | Email | Password |
+|---|---|---|
+| Admin | `abel.favian02@gmail.com` | `Abelfavian2026` |
+
+> ⚠️ **Hanya untuk demo/pengembangan.** Karena password tercantum di README yang publik, **jangan** dipakai untuk data bisnis sungguhan. Ganti password (atau hapus akun ini) sebelum aplikasi dipakai di server produksi.
+
+Akun kasir bisa dibuat oleh Admin lewat menu **Staff**, lalu kasir login cepat memakai **Kode Toko + PIN 6 digit**.
+
+---
+
+## Fitur lengkap
+
+### Kasir
+- **Order Line**: pilih menu, dine-in / takeaway, nomor meja, pelanggan member, diskon.
+- **Metode bayar**: tunai, QRIS, kartu. QRIS dinamis otomatis terkonfirmasi lewat Midtrans.
+- **Struk PDF** untuk setiap transaksi.
+- **Perintah suara** (bahasa Indonesia) untuk menambah menu dan membayar.
+- **Diskon kasir terbatas** (default maks. 10% dari subtotal); Admin tanpa batas.
+- **Checkout idempoten**: klik berulang tidak membuat transaksi ganda.
+- **Shift kasir**: modal awal, hitung uang di laci saat tutup, selisih kas tercatat otomatis. Pembayaran hanya bisa diterima saat shift terbuka (`POS_REQUIRE_SHIFT`).
+- **Kantor Virtual** (tersedia untuk Admin dan Kasir).
+
+### Manajemen
+- **Produk & kategori**: tambah, ubah, hapus (Admin); kasir hanya melihat.
+- **Stok**: masuk, keluar, dan opname dengan riwayat lengkap.
+- **Pelanggan (loyalty)**: poin dan riwayat kunjungan; nilai tukar poin diatur lewat `POS_POINT_VALUE`.
+- **Laporan penjualan** per periode: grafik harian, metode bayar, produk terlaris, laba kotor. **Ekspor PDF dan Excel**.
+- **Void transaksi**: stok otomatis dikembalikan.
+- **Manajemen staff**: tambah/ubah/nonaktifkan admin dan kasir.
+- **Pengaturan toko**: nama, alamat, telepon, pajak, teks struk, dan Server Key Midtrans.
+- **Audit log**: login, void, diskon, shift, stok, ekspor, dan QRIS. Tidak bisa diubah/dihapus dari aplikasi.
+- **Dashboard**: pendapatan, pesanan, rata-rata transaksi, grafik per jam, menu terlaris, stok menipis.
+
+### Multi-bisnis (multi-tenant)
 - Satu instalasi untuk banyak bisnis; data tiap bisnis terisolasi otomatis.
-- Tiap bisnis punya kode toko dan Midtrans Server Key sendiri.
+- Tiap bisnis punya **kode toko** dan **Midtrans Server Key** sendiri.
+- Pendaftaran bisnis baru langsung dari landing page.
+
+### Tampilan
+- Mode terang/gelap (tersimpan di browser).
+- Responsif: sidebar penuh, rail ikon di tablet, menu geser + bottom navigation di mobile.
+
+---
+
+## Alur penggunaan (flow)
+
+### 1. Alur onboarding bisnis baru
+
+```mermaid
+flowchart TD
+    A[Buka landing page] --> B[Daftar bisnis baru]
+    B --> C[Akun Admin + Kode Toko dibuat]
+    C --> D[Login dengan email + password]
+    D --> E[Pengaturan: isi data toko, pajak, teks struk]
+    E --> F[Opsional: tempel Server Key Midtrans -> Simpan & verifikasi]
+    F --> G[Tambah kategori & produk]
+    G --> H[Stok masuk awal]
+    H --> I[Staff: buat akun kasir + PIN 6 digit]
+    I --> J[Siap beroperasi]
+```
+
+### 2. Alur login
+
+```mermaid
+flowchart LR
+    L[Halaman login] --> M{Peran?}
+    M -->|Admin| N[Email + Password]
+    M -->|Kasir| O[Kode Toko + PIN 6 digit]
+    N --> P[Dashboard]
+    O --> Q[Order Line / Shift Kasir]
+```
+
+Percobaan login dibatasi (rate limit) berdasarkan IP, akun, dan kode toko.
+
+### 3. Alur harian kasir
+
+```mermaid
+flowchart TD
+    A[Kasir login via Kode Toko + PIN] --> B[Buka Shift: isi modal awal]
+    B --> C[Order Line: pilih menu]
+    C --> D[Pilih dine-in / takeaway + nomor meja]
+    D --> E[Opsional: pilih pelanggan member & diskon]
+    E --> F{Metode bayar}
+    F -->|Tunai| G[Input uang diterima, kembalian dihitung]
+    F -->|Kartu| H[Catat pembayaran kartu]
+    F -->|QRIS| I[Alur QRIS dinamis]
+    G --> J[Transaksi tersimpan, stok berkurang, poin member bertambah]
+    H --> J
+    I --> J
+    J --> K[Cetak / unduh struk PDF]
+    K --> C
+    K --> L[Tutup Shift: hitung uang di laci]
+    L --> M[Selisih kas tercatat otomatis]
+```
+
+### 4. Alur pembayaran QRIS dinamis
+
+```mermaid
+sequenceDiagram
+    participant K as Kasir
+    participant A as TapKit
+    participant M as Midtrans
+    participant C as Pelanggan
+    K->>A: Pilih QRIS & konfirmasi keranjang
+    A->>M: Buat charge QRIS (nominal terkunci, 15 menit)
+    M-->>A: QR code
+    A-->>K: Tampilkan QR
+    C->>M: Scan & bayar
+    M-->>A: Webhook notifikasi (opsional)
+    A->>M: Cek ulang status (selalu dilakukan)
+    M-->>A: settlement
+    A-->>K: Lunas, pesanan tercatat
+```
+
+- Pesanan baru tercatat **setelah** Midtrans mengonfirmasi lunas.
+- Tanpa webhook, status tetap dicek otomatis saat QR tampil.
+- Bisnis tanpa Server Key otomatis memakai **QRIS manual**.
+
+### 5. Alur stok
+
+```mermaid
+flowchart LR
+    A[Stok masuk] --> S[(Stok produk)]
+    B[Penjualan] -->|berkurang| S
+    C[Void transaksi] -->|dikembalikan| S
+    D[Stok keluar manual] -->|berkurang| S
+    E[Opname] -->|koreksi ke jumlah fisik| S
+    S --> F[Riwayat stok]
+    S --> G[Peringatan stok menipis di Dashboard]
+```
+
+### 6. Alur void & audit
+
+```mermaid
+flowchart LR
+    A[Admin buka riwayat transaksi] --> B[Void transaksi]
+    B --> C[Stok dikembalikan]
+    B --> D[(Audit Log)]
+    E[Login, diskon, shift, stok, ekspor, QRIS] --> D
+```
+
+### 7. Alur pelaporan
+
+```mermaid
+flowchart LR
+    A[Admin: menu Laporan] --> B[Pilih periode]
+    B --> C[Grafik harian, metode bayar, produk terlaris, laba kotor]
+    C --> D[Ekspor PDF]
+    C --> E[Ekspor Excel]
+```
+
+---
 
 ## Teknologi
 
@@ -35,10 +195,12 @@ Aplikasi kasir (Point of Sale) multi-bisnis berbasis **Laravel**, dengan manajem
 
 > Tailwind dimuat lewat CDN supaya tanpa proses build. Untuk produksi berskala besar, pertimbangkan mengompilasi Tailwind (dan sesuaikan CSP).
 
-## Tips Instalasi
+---
+
+## Instalasi
 
 ```bash
-git clone <url-repo> tapkit
+git clone https://github.com/abelfavian21/omahcoding-POS.git tapkit
 cd tapkit
 
 composer install
@@ -59,6 +221,8 @@ Buka `http://localhost:8000`. Login dan pendaftaran ada di landing page.
 
 > **Seeder membuat akun demo dengan password lemah dan menolak berjalan di `production`.** Detail akun demo ada di `database/seeders/DatabaseSeeder.php`. Jangan dipakai di server sungguhan.
 
+---
+
 ## Konfigurasi `.env`
 
 Pengaturan toko dan keamanan dibaca dari `config/pos.php`:
@@ -77,7 +241,9 @@ Pengaturan toko dan keamanan dibaca dari `config/pos.php`:
 | `MIDTRANS_QRIS_ACQUIRER` | `gopay` | Acquirer QRIS Midtrans (opsional) |
 | `MIDTRANS_NOTIFY_URL` | kosong | Override URL webhook per transaksi (opsional) |
 
-Untuk pembayaran QRIS, **Server Key Midtrans tidak diisi di `.env`.** Tiap bisnis mengisinya sendiri di menu Pengaturan (lihat bagian QRIS di bawah).
+Untuk pembayaran QRIS, **Server Key Midtrans tidak diisi di `.env`.** Tiap bisnis mengisinya sendiri di menu Pengaturan.
+
+---
 
 ## Peran dan akses
 
@@ -90,6 +256,8 @@ Untuk pembayaran QRIS, **Server Key Midtrans tidak diisi di `.env`.** Tiap bisni
 | Login dengan email + password | ✅ | ✅ |
 | Login cepat Kode Toko + PIN | ❌ | ✅ |
 
+---
+
 ## QRIS dinamis (Midtrans)
 
 Pembayaran QRIS dibuat per transaksi, dengan nominal terkunci dan masa berlaku 15 menit. Pesanan baru tercatat **setelah** Midtrans mengonfirmasi lunas.
@@ -100,6 +268,8 @@ Pembayaran QRIS dibuat per transaksi, dengan nominal terkunci dan masa berlaku 1
 4. (Opsional) Pasang URL webhook `https://<domain>/payments/midtrans/notify` di dashboard Midtrans. Tanpa webhook, status tetap dicek otomatis saat QR tampil.
 
 Bisnis tanpa key otomatis memakai QRIS manual. Panduan lengkap dan cara uji sandbox: [`MIDTRANS-SETUP.md`](MIDTRANS-SETUP.md).
+
+---
 
 ## Keamanan
 
@@ -112,6 +282,8 @@ Bisnis tanpa key otomatis memakai QRIS manual. Panduan lengkap dan cara uji sand
 - **Header keamanan** (CSP, dan lainnya) lewat middleware `SecurityHeaders`. Mulai dari `POS_CSP_MODE=report`, lalu naikkan ke `enforce` setelah tidak ada pelanggaran.
 - **Webhook Midtrans**: signature SHA-512 diverifikasi dengan key bisnis pemilik transaksi, status dikonfirmasi ulang ke API Midtrans, nominal dicocokkan, pemrosesan idempoten.
 - Server Key Midtrans terenkripsi di database, tidak pernah dikirim ke browser atau dicatat di log.
+
+---
 
 ## Struktur proyek
 
@@ -131,12 +303,16 @@ resources/views/
 routes/web.php
 ```
 
+---
+
 ## Desain dan tampilan
 
 - Design system *Luminescent Fintech*: sidebar `#151624`, aksen lime `#D2F839`, kanvas `#F1F3F6`, font Plus Jakarta Sans.
 - Semua token warna dan komponen (`.card`, `.btn-primary`, `.input`, `.chip`, `.pill`, …) ada di `resources/views/partials/head.blade.php`.
 - Responsif: sidebar penuh di ≥1280px, rail ikon di tablet, menu geser + bottom navigation di mobile. Tabel otomatis menjadi daftar kartu di layar kecil.
 - Mode terang/gelap tersimpan di browser.
+
+---
 
 ## Pemecahan masalah
 
@@ -145,11 +321,12 @@ routes/web.php
 - **Key hilang setelah `APP_KEY` diganti:** key terenkripsi memakai `APP_KEY`; isi ulang key di Pengaturan.
 - **Perubahan `.env` tidak terbaca:** jalankan `php artisan config:clear`.
 - **Webhook tidak masuk saat lokal:** pakai tunnel (mis. ngrok), set `APP_URL` ke URL publik, dan tempel URL notifikasi di dashboard Midtrans.
+- **Tidak bisa menerima pembayaran:** pastikan shift sudah dibuka (atau set `POS_REQUIRE_SHIFT=false` untuk development).
+
+---
 
 ## Pengembangan lanjutan (ide)
 
 Modifier produk, simpan pesanan (hold), tukar poin di kasir, cetak struk thermal, notifikasi stok menipis, resep dan bahan baku, refund parsial QRIS, kitchen display, mode offline (PWA).
 
-## Lisensi
-
-Tentukan lisensi sebelum dipublikasikan (mis. MIT, atau *proprietary* bila untuk produk komersial).
+---
