@@ -31,7 +31,7 @@ Gunakan akun berikut untuk langsung mencoba aplikasi (login lewat halaman login 
 
 | Peran | Email | Password |
 |---|---|---|
-| Admin | `abel.favian02@gmail.com` | `Abelfavian2026` |
+| User | `abel.favian02@gmail.com` | `Abelfavian2026` |
 
 > ⚠️ **Hanya untuk demo/pengembangan.** Karena password tercantum di README yang publik, **jangan** dipakai untuk data bisnis sungguhan. Ganti password (atau hapus akun ini) sebelum aplikasi dipakai di server produksi.
 
