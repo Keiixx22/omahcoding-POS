@@ -130,8 +130,8 @@
   <div class="space-y-5 min-w-0 {{ $selected ? 'order-first xl:order-none' : '' }}">
     @if ($selected)
       <div class="card overflow-hidden">
-        <div class="h-20 bg-[#181829] px-5 pt-4 flex justify-between text-lime-accent text-xs font-bold">
-          <span class="flex items-center gap-1"><span class="material-symbols-outlined fill-1" style="font-size:16px">star</span> MEMBER TERPILIH</span><span class="bg-white/10 rounded-full px-2.5 h-6 grid place-items-center text-white">{{ $selected->code }}</span>
+        <div class="h-20 bg-[#181829] px-5 pt-4 flex items-start justify-between gap-2 text-lime-accent text-xs font-bold">
+          <span class="flex items-center gap-1 h-6"><span class="material-symbols-outlined fill-1" style="font-size:16px">star</span> MEMBER TERPILIH</span><span class="bg-white/10 rounded-full px-2.5 h-6 grid place-items-center text-white">{{ $selected->code }}</span>
         </div>
         <div class="px-5 pb-5 -mt-8">
           <div class="flex items-end justify-between">
